@@ -1,0 +1,112 @@
+﻿<Window x:Class="ObjectStorageExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Oracle Object Storage Explorer" Height="600" Width="800">
+    <Grid>
+        <TabControl x:Name="tabControlMain">
+            <!-- Tab 1: Oracle Object Storage Explorer -->
+            <TabItem Header="Oracle Object Storage Explorer" x:Name="tabItemExplorer" IsEnabled="False">
+                <DockPanel>
+                    <TreeView x:Name="treeViewStorage" SelectedValuePath="Path" SelectedItemChanged="TreeView_SelectedItemChanged">
+                        <TreeView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Upload" Click="Upload_Click"/>
+                                <MenuItem Header="Open Gateway Url" Click="GatewayUrl_Click"/>
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem">
+                                <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
+                                <!--<EventSetter Event="Selected" Handler="TreeViewItem_Selected" />-->
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </TreeView>
+                    <!-- Right: DataGrid for file details -->
+                    <StackPanel DockPanel.Dock="Right" Width="Auto" Margin="10">
+                        <DataGrid x:Name="dataGridFiles" CanUserAddRows="false" VerticalScrollBarVisibility="Auto" MaxHeight="500" HorizontalScrollBarVisibility="Auto" AutoGenerateColumns="False" Margin="0,10,0,0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="File Name" Binding="{Binding Name}" />
+                                <DataGridTextColumn Header="Size" Binding="{Binding Size}" />
+                                <DataGridTextColumn Header="Last Modified" Binding="{Binding LastModified}" />
+                                <!-- Download Link Column -->
+                                <DataGridTemplateColumn Header="Download">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Hyperlink NavigateUri="{Binding DownloadUrl}" RequestNavigate="Hyperlink_RequestNavigate">
+                                                    Download
+                                                </Hyperlink>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Delete">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Hyperlink NavigateUri="{Binding Path}" RequestNavigate="Hyperlink_Delete">
+                                                    Delete
+                                                </Hyperlink>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </DockPanel>
+            </TabItem>
+
+            <!-- Tab 2: Settings -->
+            <TabItem Header="Settings">
+                <StackPanel Margin="10">
+                    <!-- ODT.NET Compat Fields -->
+                    <StackPanel Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Tenant Id:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtTenantId" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="User Id:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtUserId" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Fingerprint:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtFingerprint" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Private Key:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtPrivateKey" Width="500" TextWrapping="Wrap" AcceptsReturn="True" Margin="0" Height="120"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Region:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtRegion" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Bucket Name:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtBucketName" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Namespace Name:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtNamespaceName" Width="500" Margin="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <Label Content="Gateway Url:" Width="120" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="txtGatewayUrl" Width="500" Margin="0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
+                        <Button Content="Save" Click="Save_Click" Margin="0,0,10,0"/>
+                        <Button Content="Close" Click="Close_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
